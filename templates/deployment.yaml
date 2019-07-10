@@ -35,9 +35,9 @@ spec:
           timeoutSeconds: 1
 {{- if .Values.persistence }}
         volumeMounts:
-          name: data
-          mountPath: /appdata
-          subPath: shared/video
+        - name: data
+          mountPath: "/appdata"
+          subPath: "shared/video"
 {{- end }}
         env:
         - name: DB_TYPE
