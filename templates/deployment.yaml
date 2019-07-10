@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        ports:
+        - name: http
+          containerPort: 6070
+        livenessProbe:
+          httpGet:
+            path: /probe
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /probe
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+{{- if .Values.persistence }}
+        volumeMounts:
+          name: data
+          mountPath: /appdata
+          subPath: shared/video
+{{- end }}
+        env:
+        - name: DB_TYPE
+          value: postgres
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+
+{{- if .Values.persistence }}
+      volumes:
+      - name: data
+        {{- if .Values.persistence.fromProvider }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+        {{- else }}
+{{ toYaml .Values.persistence.volume | indent 8 }}
+        {{- end }}
+{{- end }}

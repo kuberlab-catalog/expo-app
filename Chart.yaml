@@ -1,0 +1,11 @@
+name: expo-recall
+version: 0.0.1
+description: Expo Recall Demo
+keywords:
+- demo
+sources:
+- https://github.com/kuberlab-demo/expo-app
+maintainers:
+- name: Gunin Alexander
+  email: agunin@gunin.com
+engine: gotpl

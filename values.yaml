@@ -1,0 +1,18 @@
+image: kuberlab/expo-recall-ui:latest
+imagePullPolicy: Always
+serviceType: ClusterIP
+
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+
+# Configure persistence storage
+persistence:
+  fromProvider: false
+  volume:
+    nfs:
+      server: "192.168.1.55"
+      path": "/kuberlab"
+
