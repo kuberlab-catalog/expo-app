@@ -14,5 +14,5 @@ persistence:
   volume:
     nfs:
       server: "192.168.1.55"
-      path": "/kuberlab"
+      path: "/kuberlab"
 
